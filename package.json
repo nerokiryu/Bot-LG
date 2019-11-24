@@ -1,0 +1,13 @@
+{
+    "name": "little_girl",
+    "version": "1.0.0",
+    "description": "A bot that spy on you",
+    "main": "bot.js",
+    "author": "Nero",
+    "dependencies": {
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "discord.io-gateway6": "^2.5.3",
+        "fs": "0.0.1-security",
+        "winston": "^3.2.1"
+    }
+}
