@@ -13,6 +13,7 @@ logger.level = 'info';
 var wolf_chanel=params.Chanel_wolf;
 var little_girl_chanel=params.Chanel_little_girl;
 var chances = 25;
+var check_insults = false;
 var insultes = fs.readFileSync('dictionaire.txt').toString().split("\r\n");
 // Initialize Discord Bot
 var bot = new Discord.Client({
@@ -44,7 +45,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'help':
                 bot.sendMessage({
                     to: channelID,
-                    message: '!chanel_little_girl <chanel_id> : change the little girl chanel (only the GM can do that)\r\n !chanel_wolf <chanel_id> : change the wolf chanel (only the GM can do that)\r\n !chances <number between 0 and 100> : change the probability to eavesdrop (only the GM can do that)\r\n !ping : respond pong!\r\n !insult : insult yourself\r\n '
+                    message: '\r\n!chanel_little_girl <chanel_id> : change the little girl chanel (only the GM can do that)\r\n !chanel_wolf <chanel_id> : change the wolf chanel (only the GM can do that)\r\n !chances <number between 0 and 100> : change the probability to eavesdrop (only the GM can do that)\r\n !ping : respond pong!\r\n !insult : insult yourself\r\n '
                 });
             break;
             // !ping
@@ -54,9 +55,30 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: 'Pong!'
                 });
             break;
+            case 'checker':
+                if(params.GM_ID == userID){
+                    var response;
+                    if(typeof args[1] !== 'undefined' ){
+                        
+                        if(args[1] == 'on'){
+                            check_insults = true;
+                            response = 'The insult checker is changed to '+args[1];
+                        }else if (args[1] =='off'){
+                            check_insults = false;
+                            response = 'The insult checker is changed to '+args[1];
+                        }
+                    }else{
+                        response = 'You MotherFucker! Wrong argument your message must be in this form : !checker <on/off>'
+                    }
+                    bot.sendMessage({
+                        to: channelID,
+                        message: response
+                    });
+                }
+            break;
             // !insult
             case 'insult':
-                var insult=insultes[Math.floor(Math.random() * Math.floor(insultes.length))].slice(0, -1);
+                var insult=insultes[Math.floor(Math.random() * Math.floor(insultes.length))];
                 bot.sendMessage({
                     to: channelID,
                     message: insult+' ! '+"<@!" + userID + ">"
@@ -108,21 +130,25 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                         to: channelID,
                         message: response
                     });
+                    
                 }
             break;
          }
      }
      // this is not a wolf or command
-     else{
-        insultes.forEach(function(element) {
-            if(message.includes(element)){
-                logger.debug('insulte détecté !');
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'Hey their is kids here, you mother fucker! '+"<@!" + userID + ">"
-                });
-                
-            }
-        });
+     else if (check_insults){
+        if(userID != bot.id ){
+            insultes.forEach(function(element) {
+                const regex = new RegExp('\\b' + element.toLowerCase() + '\\b');
+                if(regex.test(message.toLowerCase())){
+                    logger.debug('insulte détecté !');
+                    bot.sendMessage({
+                        to: channelID,
+                        message: 'Hey their is kids here, you mother fucker! '+"<@!" + userID + ">"
+                    });
+                    
+                }
+            });
+        }
      }
 });
