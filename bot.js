@@ -45,7 +45,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'help':
                 bot.sendMessage({
                     to: channelID,
-                    message: '\r\n!chanel_little_girl <chanel_id> : change the little girl chanel (only the GM can do that)\r\n !chanel_wolf <chanel_id> : change the wolf chanel (only the GM can do that)\r\n !chances <number between 0 and 100> : change the probability to eavesdrop (only the GM can do that)\r\n !ping : respond pong!\r\n !insult : insult yourself\r\n '
+                    message: '\r\n!checker <on/off> : activate or deactivate the insult checker\r\n!chanel_little_girl <chanel_id> : change the little girl chanel (only the GM can do that)\r\n !chanel_wolf <chanel_id> : change the wolf chanel (only the GM can do that)\r\n !chances <number between 0 and 100> : change the probability to eavesdrop (only the GM can do that)\r\n !ping : respond pong!\r\n !insult : insult yourself\r\n '
                 });
             break;
             // !ping
